@@ -18,7 +18,7 @@ namespace JSMS.Api.Controllers
           _registerRepository = new RegisterRepository(connectionFactory.GetConnection());
         }
 
-        [HttpPost("Register/RegisterUser")]
+        [HttpPost("/RegisterUser")]
         public async Task RegisterUser(RegisterRequest request) => await _registerRepository.RegisterUserAsync(RegisterRequestMapper.RegisterMapper(request));
     }
 }

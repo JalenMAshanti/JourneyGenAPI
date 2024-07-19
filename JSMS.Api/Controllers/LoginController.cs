@@ -42,7 +42,7 @@ namespace JSMS.Api.Controllers
             }
             else
             {
-                string token;
+                string? token;
 
                 if (user.RoleId == 0)
                 {
