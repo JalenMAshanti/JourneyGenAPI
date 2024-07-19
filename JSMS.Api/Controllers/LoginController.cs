@@ -1,13 +1,9 @@
 ﻿using IdentityServer3.Core.Services;
-using JSMS.Persitence.DataTransferObjects;
+using JSMS.Api.JwtTokenGenerator;
 using JSMS.Persitence.Factories;
 using JSMS.Persitence.Models.Login;
 using JSMS.Persitence.Repositories;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 
 namespace JSMS.Api.Controllers
 {
@@ -21,12 +17,14 @@ namespace JSMS.Api.Controllers
         private readonly IConfiguration _configuration;
         private readonly LoginRepository _LoginRepository;
         private readonly IUserService _userService;
+        private readonly JwtTokenAuthGen _jwtAuthGen;
 
-        public LoginController(IConfiguration configuration, IUserService userService)
+        public LoginController(IConfiguration configuration, IUserService userService, JwtTokenAuthGen jwtTokenAuthGen)
         {
             _LoginRepository = new LoginRepository(connectionFactory.GetConnection());
             _configuration = configuration;
             _userService = userService;
+            _jwtAuthGen = jwtTokenAuthGen;
         }
 
 
@@ -44,33 +42,26 @@ namespace JSMS.Api.Controllers
             }
             else
             {
-                string token = CreateToken(user);
+                string token;
+
+                if (user.RoleId == 0)
+                {
+                    token = _jwtAuthGen.CreateToken_User(user);
+                }
+                else if (user.RoleId == 1)
+                {
+                    token = _jwtAuthGen.CreateToken_Leader(user);
+                }
+                else if (user.RoleId == 2)
+                {
+                    token = _jwtAuthGen.CreateToken_Admin(user);
+                }
+                else
+                {
+                    token = null;
+                }
                 return Ok(token);
             }
-        }
-
-        private string CreateToken(Login_DTO login)
-        {
-            List<Claim> claims = new List<Claim> {
-            new Claim(ClaimTypes.Name, login.Email)
-            };
-
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
-                _configuration.GetSection("JwtSettings:Key").Value!));
-
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
-
-            var token = new JwtSecurityToken(
-                issuer: _configuration["JwtSettings:Issuer"],
-                audience: _configuration["JwtSettings:Audience"],
-                claims: claims,
-                expires: DateTime.Now.AddDays(1),
-                signingCredentials: creds
-            );
-
-            var jwt = new JwtSecurityTokenHandler().WriteToken(token);
-
-            return jwt;
         }
     }
 }

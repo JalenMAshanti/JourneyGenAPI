@@ -1,6 +1,7 @@
 using IdentityServer3.Core.Services;
-using JSMS.Api;
 using JSMS.Api.Controllers;
+using JSMS.Api.JwtTokenGenerator;
+using JSMS.Api.Services;
 using JSMS.Persitence.Repositories;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -22,6 +23,7 @@ builder.Services.AddScoped<UserRepository>();
 builder.Services.AddScoped<RegisterRepository>();
 builder.Services.AddScoped<LoginRepository>();
 builder.Services.AddScoped<UserController>();
+builder.Services.AddScoped<JwtTokenAuthGen>();
 
 builder.Services.AddAuthorization();
 
