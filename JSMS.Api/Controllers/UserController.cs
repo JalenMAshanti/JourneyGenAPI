@@ -27,7 +27,7 @@ namespace JSMS.Api.Controllers
 
 
      
-        [HttpDelete("DeleteUserById"), Authorize]
+        [HttpDelete("DeleteUserById"), Authorize(Roles = "Admin")]
         public async Task DeleteUser(int id) => await _userRepository.DeleteUserAsync(id);      
     }
 }

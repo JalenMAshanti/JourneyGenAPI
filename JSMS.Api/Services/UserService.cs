@@ -2,7 +2,7 @@
 using IdentityServer3.Core.Services;
 using IdentityServer3.Core.Models;
 
-namespace JSMS.Api
+namespace JSMS.Api.Services
 {
     public class UserService : IUserService
     {
