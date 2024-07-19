@@ -1,8 +1,10 @@
+using HtmlAgilityPack;
 using IdentityServer3.Core.Services;
 using JSMS.Api.Controllers;
 using JSMS.Api.JwtTokenGenerator;
 using JSMS.Api.Services;
 using JSMS.Persitence.Repositories;
+using JSMS.Persitence.WebScraping.VerseOfTheDay;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using MySql.Data.MySqlClient;
@@ -24,10 +26,33 @@ builder.Services.AddScoped<RegisterRepository>();
 builder.Services.AddScoped<LoginRepository>();
 builder.Services.AddScoped<UserController>();
 builder.Services.AddScoped<JwtTokenAuthGen>();
+builder.Services.AddScoped<HttpClient>();
+builder.Services.AddScoped<HtmlDocument>();
+
+//---------------------For Generating Verse-----------------------------------------
+builder.Services.AddScoped<VerseOfTheDayWebScrapper>(provider =>
+{
+    var configuration = provider.GetRequiredService<IConfiguration>();
+    var url = configuration["ScraperSettings:VerseUrl"]!;
+    var node = configuration["ScraperSettings:verseNode"]!;
+    return new VerseOfTheDayWebScrapper(url, node);
+});
+
+//---------------------For Generating Verse Location-----------------------------------------
+builder.Services.AddScoped<VerseLocationWebScrapper>(provider =>
+{
+    var configuration = provider.GetRequiredService<IConfiguration>();
+    var url = configuration["ScraperSettings:VerseUrl"]!;
+    var node = configuration["ScraperSettings:VerseLocationNode"]!;
+    return new VerseLocationWebScrapper(url, node);
+});
+
+
 
 builder.Services.AddAuthorization();
-
 builder.Services.AddControllers();
+
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 
