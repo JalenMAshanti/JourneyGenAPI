@@ -17,7 +17,7 @@ namespace JSMS.Persitence.Repositories
 
         public async Task<Login_DTO> LoginUserAsync(LoginRequest request)
         {
-            string? sql = "SELECT Email, Password, RoleID FROM user WHERE Email = @Email AND Password = @Password";
+            string? sql = "SELECT Id, FirstName, LastName, Gender, Email, RoleId, GroupId, Grade, PhoneNumber, Password FROM user WHERE Email = @Email AND Password = @Password";
 
             try
             {

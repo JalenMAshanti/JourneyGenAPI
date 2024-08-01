@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using JSMS.Domain.Models;
 using System.Data;
+using System.Security.Policy;
 
 namespace JSMS.Persitence.Repositories
 {
@@ -30,3 +31,4 @@ namespace JSMS.Persitence.Repositories
         }
     }
 }
+

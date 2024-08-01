@@ -3,7 +3,9 @@ using IdentityServer3.Core.Services;
 using JSMS.Api.Controllers;
 using JSMS.Api.JwtTokenGenerator;
 using JSMS.Api.Services;
+using JSMS.Domain.Models;
 using JSMS.Persitence.Repositories;
+using JSMS.Persitence.WebScraping.BibleChapter;
 using JSMS.Persitence.WebScraping.VerseOfTheDay;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -28,6 +30,7 @@ builder.Services.AddScoped<UserController>();
 builder.Services.AddScoped<JwtTokenAuthGen>();
 builder.Services.AddScoped<HttpClient>();
 builder.Services.AddScoped<HtmlDocument>();
+builder.Services.AddScoped<BibleChapter>();
 
 //---------------------For Generating Verse-----------------------------------------
 builder.Services.AddScoped<VerseOfTheDayWebScrapper>(provider =>
@@ -46,6 +49,8 @@ builder.Services.AddScoped<VerseLocationWebScrapper>(provider =>
     var node = configuration["ScraperSettings:VerseLocationNode"]!;
     return new VerseLocationWebScrapper(url, node);
 });
+
+builder.Services.AddScoped<BibleChapterWebScraper>();
 
 
 

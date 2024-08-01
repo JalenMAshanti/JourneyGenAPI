@@ -17,6 +17,8 @@ namespace JSMS.Persitence.Mappers
             user.PhoneNumber = request.PhoneNumber;
             user.Gender = request.Gender;
             user.Password = request.Password;
+            user.RoleId = request.RoleId;
+            user.Grade = request.Grade;
             
             return user;            
         }

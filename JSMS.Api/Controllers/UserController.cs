@@ -28,6 +28,22 @@ namespace JSMS.Api.Controllers
 
      
         [HttpDelete("DeleteUserById"), Authorize(Roles = "Admin")]
-        public async Task DeleteUser(int id) => await _userRepository.DeleteUserAsync(id);      
+        public async Task DeleteUser(int id) => await _userRepository.DeleteUserAsync(id);
+
+
+        [HttpGet("GetLeadersByGroupId")]
+        public async Task<IActionResult> GetLeadersByGroupId(int groupId) => Ok(await _userRepository.GetLeadersByGroupIdAsync(groupId));
+
+        [HttpGet("GetStudentsByGroupId")]
+        public async Task<IActionResult> GetStudentsByGroupId(int groupId) => Ok(await _userRepository.GetStudentsByGroupIdAsync(groupId));
+
+        [HttpGet("GetUnverifiedUsersByRoleId")]
+        public async Task<IActionResult> GetUnverifiedUserByRoleId(int roleId) => Ok(await _userRepository.GetUnassignedAndUnverifiedUsers_ByRoleId(roleId));
+
+        [HttpGet("GetAdmins")]
+        public async Task<IActionResult> GetAdmins() => Ok(await _userRepository.GetAdminsAsync());
+
+        [HttpGet("GetLeaders")]
+        public async Task<IActionResult> GetLeaders() => Ok(await _userRepository.GetLeadersAsync());
     }
 }

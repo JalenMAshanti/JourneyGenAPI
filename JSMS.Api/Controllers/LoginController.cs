@@ -47,6 +47,7 @@ namespace JSMS.Api.Controllers
                 if (user.RoleId == 0)
                 {
                     token = _jwtAuthGen.CreateToken_User(user);
+                    user.TempKey = token;
                 }
                 else if (user.RoleId == 1)
                 {
@@ -55,12 +56,14 @@ namespace JSMS.Api.Controllers
                 else if (user.RoleId == 2)
                 {
                     token = _jwtAuthGen.CreateToken_Admin(user);
+                    user.TempKey = token;
                 }
                 else
                 {
                     token = null;
+                    user.TempKey = token;
                 }
-                return Ok(token);
+                return Ok(user);
             }
         }
     }
