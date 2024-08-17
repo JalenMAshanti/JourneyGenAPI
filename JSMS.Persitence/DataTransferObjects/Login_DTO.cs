@@ -14,6 +14,7 @@
         public int GroupId { get; set; }
         public int Grade { get; set; }
         public long PhoneNumber { get; set; }
+        public int ReadingStreak { get; set; }
         public string? TempKey { get; set; }
 
     }

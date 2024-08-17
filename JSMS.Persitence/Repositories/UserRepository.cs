@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using JSMS.Domain.Models;
 using JSMS.Persitence.Abstractions;
 using JSMS.Persitence.DataTransferObjects;
 using System.Data;
@@ -101,6 +102,40 @@ namespace JSMS.Persitence.Repositories
             string sql = "SELECT * FROM user WHERE RoleId > 1 AND IsVerified = true";
             var result = await _db.QueryAsync<User_DTO>(sql);
             return result;
+        }
+
+        public async Task<int> VerifyUserAsync(int userId, int groupId)
+        {
+            string sql = "UPDATE user SET IsVerified = true, GroupId = @GroupId WHERE Id = @UserId;";
+            var result = await _db.ExecuteAsync(sql, new { UserId = userId, GroupId = groupId });
+            return result;
+        }
+
+        public async Task<int> PlusUserReadingStreakAsync(int userId)
+        {
+            string sql = "SELECT ReadingStreak, LastTimeRead FROM user WHERE Id = @Id";
+            var query = await  _db.QueryAsync<ReadingStreak>(sql, new {Id = userId});
+            var streak = query.FirstOrDefault();
+
+            if (streak == null)
+            {
+                throw new NoNullAllowedException();
+            }
+            else  
+            {
+                DateOnly currentDate = DateOnly.FromDateTime(DateTime.Now);
+                string mysqlDateFormat = currentDate.ToString("yyyy-MM-dd");
+                string comparisonDate = currentDate.ToString("MM/dd/yyyy");
+                string concat = $"{comparisonDate} 00:00:00";
+                if (streak.LastTimeRead != concat) 
+                {
+                    sql = "UPDATE user SET ReadingStreak = ReadingStreak + 1, LastTimeRead = @Date WHERE Id = @Id";
+                    var result = await _db.ExecuteAsync(sql, new{Date = mysqlDateFormat,Id = userId});
+                    return streak.ReadingSteakCount + 1;
+                }
+
+                return 0; 
+            }
         }
     }
 }

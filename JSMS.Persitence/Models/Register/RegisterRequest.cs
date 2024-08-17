@@ -23,6 +23,7 @@ namespace JSMS.Persitence.Models.Register
         public int Grade { get; set; }
         public long PhoneNumber { get; set; }
         public string Password { get; set; }
+       
 
     }
 }

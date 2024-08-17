@@ -21,7 +21,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\JSMS.Application\JSMS.Application.csproj" />
     <ProjectReference Include="..\JSMS.Domain\JSMS.Domain.csproj" />
     <ProjectReference Include="..\JSMS.Persitence\JSMS.Persitence.csproj" />
   </ItemGroup>
