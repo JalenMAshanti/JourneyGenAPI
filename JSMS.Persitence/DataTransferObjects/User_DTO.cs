@@ -12,6 +12,7 @@
         public int GroupId { get; set; }
         public bool IsActive { get; set; }
         public bool IsVerified { get; set; }
+        public int ReadingStreak { get; set; }
       
     }
 }

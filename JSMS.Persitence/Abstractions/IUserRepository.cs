@@ -1,4 +1,5 @@
 ﻿using JSMS.Persitence.DataTransferObjects;
+using Microsoft.AspNetCore.Mvc;
 
 namespace JSMS.Persitence.Abstractions
 {
@@ -19,5 +20,9 @@ namespace JSMS.Persitence.Abstractions
         public Task<IEnumerable<User_DTO>> GetAdminsAsync();
 
         public Task<IEnumerable<User_DTO>> GetLeadersAsync();
+
+        public Task<int> VerifyUserAsync(int userId, int groupId);
+
+        public Task<int> PlusUserReadingStreakAsync(int userId);
     }
 }

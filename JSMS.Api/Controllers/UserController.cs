@@ -45,5 +45,13 @@ namespace JSMS.Api.Controllers
 
         [HttpGet("GetLeaders")]
         public async Task<IActionResult> GetLeaders() => Ok(await _userRepository.GetLeadersAsync());
+
+        [HttpPut("VerifyUser")]
+        public async Task<IActionResult> VerifyUser(int userId, int groupId) => Ok(await _userRepository.VerifyUserAsync(userId, groupId));
+
+        [HttpPut("UpdateUserReadingStreak")]
+
+        public async Task<IActionResult> UpdateUserReadingStreak(int userId) => Ok(await _userRepository.PlusUserReadingStreakAsync(userId));
+
     }
 }

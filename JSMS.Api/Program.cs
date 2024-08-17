@@ -4,6 +4,8 @@ using JSMS.Api.Controllers;
 using JSMS.Api.JwtTokenGenerator;
 using JSMS.Api.Services;
 using JSMS.Domain.Models;
+using JSMS.Persitence.EmailServices;
+using JSMS.Persitence.Factories;
 using JSMS.Persitence.Repositories;
 using JSMS.Persitence.WebScraping.BibleChapter;
 using JSMS.Persitence.WebScraping.VerseOfTheDay;
@@ -16,7 +18,8 @@ using System.Text;
 
 
 var builder = WebApplication.CreateBuilder(args);
-var config = builder.Configuration;
+var config = builder.Configuration.SetBasePath(Directory.GetCurrentDirectory())
+    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 
 // Add services to the container.
 builder.Services.AddScoped<IDbConnection>(sp =>
@@ -31,6 +34,25 @@ builder.Services.AddScoped<JwtTokenAuthGen>();
 builder.Services.AddScoped<HttpClient>();
 builder.Services.AddScoped<HtmlDocument>();
 builder.Services.AddScoped<BibleChapter>();
+builder.Services.AddScoped<EmailSender>();
+builder.Services.AddScoped<EmailConnectionFactory>();
+builder.Services.AddScoped<MessageRepository>();
+
+
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigin",
+        policy =>
+        {
+            policy.WithOrigins("https://localhost:7035")  // Allow the origin of your front-end app
+                  .AllowAnyHeader()
+                  .AllowAnyMethod();
+        });
+});
+
+
+
 
 //---------------------For Generating Verse-----------------------------------------
 builder.Services.AddScoped<VerseOfTheDayWebScrapper>(provider =>
@@ -98,11 +120,12 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseCors("AllowSpecificOrigin");
 
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseAuthorization();
+
 
 app.MapControllers();
 
